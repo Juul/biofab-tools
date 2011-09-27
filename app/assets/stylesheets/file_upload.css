@@ -1,0 +1,23 @@
+
+
+body {
+    margin: 40px;
+}
+
+#filedrop {
+    position: absolute;
+    right: 40px;
+    top: 40px;
+    width: 350px;
+    height: 150px;
+    background-color: #CCCCCC
+}
+
+.filedrop {
+    border: 4px solid black;
+}
+
+.filedrop_over { 
+    border-color: red;
+}
+

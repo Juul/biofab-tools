@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Constraint-based expression level design</title>
+  <%= stylesheet_link_tag 'constraint' %>
+  <%= stylesheet_link_tag 'slider' %>
+
+  <%= javascript_include_tag 'jquery.tools.min' %>
+  <script type='text/javascript'>
+    $.noConflict(); // relinquish jquery control of $ variable
+  </script>
+  <%= javascript_include_tag 'prototype' %>
+  <%= javascript_include_tag 'Browser' %>
+  <%= javascript_include_tag 'Constrainer' %>
+
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<%= yield %>
+
+</body>
+</html>

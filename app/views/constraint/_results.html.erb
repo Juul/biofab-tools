@@ -1,0 +1,47 @@
+
+
+<% if @exps.length <= 0 %>
+
+<p>No parts found matching the given criteria.</p>
+
+<% else %>
+
+  <% @exps.each do |exp| %>
+
+    <div class='result'>
+      <div class='level'>
+        Expression level <span class='level_number'><%= (exp.normalized * 100).round %></span> AU 
+        (within <span class='deviation'><%= exp.diff(@target) %> </span>AU of target).
+      </div>
+      <div class='promoter'>
+        <div class='label'>Promoter:</div>
+        <div class='value' id='promoter_tab_<%= exp.id.to_s %>'>
+          <a href='#' onclick="Constrainer.toggle('promoter', '<%= exp.id.to_s %>'); return false;"><%= exp.promoter.name %></a>
+        </div>
+      </div>
+      <div class='utr'>
+        <div class='label'>5' UTR:</div>
+        <div class='value' id='utr_tab_<%= exp.id.to_s %>'>
+          <a href='#' onclick="Constrainer.toggle('utr', '<%= exp.id.to_s %>'); return false;"><%= exp.utr.name %></a>
+        </div>
+      </div>
+      <div class='floatfix'></div>
+      <div class='promoter_seq' style='display:none' id='promoter_seq_<%= exp.id.to_s %>'>
+        Sequence: <%= exp.promoter.sequence.upcase %>
+      </div>
+
+      <div class='utr_seq' style='display:none' id='utr_seq_<%= exp.id.to_s %>'>
+        Sequence: <%= exp.utr.sequence.upcase %>
+      </div>
+
+    </div>
+
+  <% end %>
+
+<% end %>
+
+<% if @limit %>
+  <p class='show_all'><a href='#' onclick="Constrainer.do_query({limit: <%= @limit + 10 %>}); return false;">Show next 10 results</a></p>
+
+  <p class='show_all'><a href='#' onclick="Constrainer.do_query({show_all: true}); return false;">Show all results</a></p>
+<% end %>

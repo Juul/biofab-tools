@@ -1,0 +1,60 @@
+
+<div class="holder">
+  <h1>BIOFAB Expression Level Selector</h1>
+</div>
+
+<hr />
+
+<div id="buttons" class="holder">
+	<h3>Constraints</h3>
+  
+  <p>Drag the slider to select a target expression level.</p>
+
+	<input id='expression_level_slider' type='range' name='test' min='0' max='100' value='50' /> <span class='range_label'>AU<span class='sub'>( % of maximum expression ).</span></span>
+	
+	<script type='text/javascript'> 
+    jQuery(':range').rangeinput();
+	</script> 	
+</div>
+
+  <div id='more_options_link_container' class='options_link_container'>
+    <a id='more_options_link' href='#' onclick='Constrainer.more_options(true); return false'>more options</a>
+  </div>
+  <div class='more_options' id='more_options' style='display:none'>
+    <!-- more options -->
+    <div class='padder'>
+      
+      <p><span class='formlabel'>Tolerance: +/- </span><input id='tolerance' type='text' value='100' onchange="Constrainer.do_query()" /> AU.</p>
+
+      <p><span class='formlabel'>Promoter must contain: </span><input id='promoter_contains' type='text' value='' onchange="Constrainer.do_query()" /></p>
+      <p><span class='formlabel'>Promoter cannot contain: </span><input id='promoter_not_contains' type='text' value='' onchange="Constrainer.do_query()" /></p>
+      <p><span class='formlabel'>5' UTR must contain: </span><input id='utr_contains' type='text' value='' onchange="Constrainer.do_query()" /></p>
+      <p><span class='formlabel'>5' UTR cannot contain: </span><input id='utr_not_contains' type='text' value='' onchange="Constrainer.do_query()" /></p>
+
+    </div>
+    <div class='options_link_container'>
+      <a id='fewer_options_link' href='#' onclick='Constrainer.more_options(false); return false'>fewer options</a>
+    </div>
+  </div>
+<hr />
+
+<div id="buttons" class="holder">
+	<h3>Results</h3>
+  <div id='results'>
+  </div>
+</div>
+
+<script type='text/javascript'>
+
+  document.observe("dom:loaded", function() {
+
+    Constrainer.hooks.expression_level = function() {
+      return $('expression_level_slider').value;
+    }
+
+    Constrainer.init('expression_level_slider');
+
+
+  });
+
+</script>

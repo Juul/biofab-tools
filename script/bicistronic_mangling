@@ -1,0 +1,77 @@
+#!/home/juul/biofab/rails/script/rails runner
+
+puts "script deactivated!"
+exit
+
+pt_promoter_id = PartType.find_by_name('promoter').id
+pt_utr_id = PartType.find_by_name('five_prime_utr').id
+
+exps = ExpressionLevel.find(:all)
+
+exps.each do |exp|
+
+  row = exp.well[0..0]
+  col = exp.well[1..1]
+
+  row_num = ["A","B","C","D","E","F","G"].index(row) + 1
+  col_num = col.to_i
+
+  if exp.plate == 'PBD-M5'
+    # do nothin
+  elsif exp.plate == 'PBD-M6'
+    col_num += 12
+  elsif exp.plate == 'PBD-M7'
+    row_num += 7
+  elsif exp.plate == 'PBD-M8'
+    col_num += 12
+    row_num += 7
+  else
+    raise "Unknown plate"
+  end
+
+  bd = Part.find_by_col("BD#{col_num}")
+  raise "no bd!" if !bd
+
+  promoter = Part.find_by_col("P#{row_num}")
+  raise "no promoter!" if !promoter
+
+  exp.promoter_part_id = promoter.id
+  exp.fiveprime_part_id = bd.id
+
+  exp.save!
+
+end
+
+exit
+Part.find(:all).each do |part|
+  part.destroy
+end
+
+
+f = File.new('/home/juul/biofab/vivek/promoters.csv')
+lines = f.readlines
+lines.each do |line|
+  col, description, name, sequence = line.gsub("\n", '').split(",")
+  part = Part.new
+  part.part_type_id = pt_promoter_id
+  part.col = col
+  part.description = description
+  part.name = name
+  part.sequence = sequence
+  part.save!
+end
+
+f = File.new('/home/juul/biofab/vivek/five_prime_utrs.csv')
+lines = f.readlines
+lines.each do |line|
+  col, sequence = line.gsub("\n", '').split(",")
+  part = Part.new
+  part.part_type_id = pt_utr_id
+  part.col = col
+  part.sequence = sequence
+  part.save!
+end
+
+
+puts "Saved #{Part.find(:all).length} parts"
+

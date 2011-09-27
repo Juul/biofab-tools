@@ -1,0 +1,42 @@
+
+<script type='text/javascript'>
+
+  var last_exp_level = 750;
+
+  function query() {
+    var slider_val = $('exp_level_slider').value;
+    var textbox_val = $('exp_level_textbox').value;
+    var exp_level;
+    if(slider_val == last_exp_level) {
+      exp_level = textbox_val;
+      $('exp_level_slider').value = exp_level;
+    } else {
+      exp_level = slider_val;
+      $('exp_level_textbox').value = exp_level;
+    }
+    last_exp_level = exp_level;
+
+    new Ajax.Request('/constraint/query', {
+      method: 'get',
+      parameters: {
+        exp_level: exp_level
+      },
+      onSuccess: function(transport) {
+        $('result').innerHTML = transport.responseText;
+      },
+      onFailure: function(transport) {
+        $('result').innerHTML = "<span style='color:red'>An error occurred: " + transport.responseText + ".</span>";
+      }
+    });
+  }
+  
+</script>
+
+<h2>Constraints-based expression level design</h2>
+
+<p>Choose an expression level:</p>
+<p><input id='exp_level_textbox' type='text' value='750' onchange="query()" /></p>
+<p><input id='exp_level_slider' type="range" min="0" max="1500" value="750" onchange="query()" /></p>
+
+
+<div id='result'></div>

@@ -1,0 +1,26 @@
+#!/home/juul/biofab/rails/script/rails runner
+
+exps = ExpressionLevel.find(:all, :include => [:promoter, :utr])
+
+i = 0
+
+exps.each do |exp1|
+  seq1 = exp1.promoter.sequence + exp1.utr.sequence
+  exps.each do |exp2|
+    
+    seq2 = exp2.promoter.sequence + exp2.utr.sequence
+
+    score = ExpressionLevel.calc_score(seq1, seq2)
+
+    s = Score.new
+    s.exp1_id = exp1.id
+    s.exp2_id = exp2.id
+    s.value = score
+    s.save!
+
+    i += 1
+
+  end
+end
+
+puts "Created #{i} records!"

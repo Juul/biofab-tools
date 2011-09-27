@@ -1,0 +1,23 @@
+#!/home/juul/biofab/rails/script/rails runner
+
+puts "script deactivated"
+exit
+
+f = File.new('/home/juul/biofab/promoter.csv')
+lines = f.readlines
+lines.each do |line|
+  sequence, name = line.gsub("\n", '').split(",")
+  sequence = sequence.upcase
+  part = Part.find_by_sequence(sequence)
+  next if !part
+  part.name = name
+  part.save!
+end
+
+parts = Part.find(:all)
+
+parts.each do |part|
+  puts "Part: #{part.sequence} - #{part.name}"
+end
+
+

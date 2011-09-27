@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Foo</title>
+  <%= stylesheet_link_tag    'application' %>
+  <%= stylesheet_link_tag    'file_upload' %>
+
+  <%= javascript_include_tag 'prototype' %>
+  <%= javascript_include_tag 'js-inflate/js-inflate' %>
+  <%= javascript_include_tag 'js-unzip/js-unzip' %>
+  <%= javascript_include_tag 'application' %>
+  <%= javascript_include_tag 'Browser' %>
+  <%= javascript_include_tag 'FileDrop' %>
+
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<%= yield %>
+
+</body>
+</html>
