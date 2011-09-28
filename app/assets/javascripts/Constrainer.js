@@ -53,7 +53,11 @@ var Constrainer = {
             method: 'get',
             parameters: Object.extend({
                 expression_level: this.hooks.expression_level(),
-                tolerance: $('tolerance').value
+                tolerance: $('tolerance').value,
+                promoter_contains: $('promoter_contains').value,
+                promoter_not_contains: $('promoter_not_contains').value,
+                utr_contains: $('utr_contains').value,
+                utr_not_contains: $('utr_not_contains').value
             },p || {}),
             onSuccess: this.query_success.bindAsEventListener(this),
             onFailure: this.query_failure.bindAsEventListener(this)

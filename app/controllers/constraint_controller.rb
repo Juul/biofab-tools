@@ -13,10 +13,50 @@ class ConstraintController < ApplicationController
     max = (@target + tolerance) / 100.0
     min = (@target - tolerance) / 100.0
 
+    # -- build conditions based on input parameters
+
+    conds = []
+
+    if params['promoter_contains'] && (params['promoter_contains'] != '')
+      str = '%' + params['promoter_contains'] + '%'
+      conds << ["parts.sequence like ? AND part_types.name = ?", str, 'promoter']
+    end
+
+    if params['promoter_not_contains'] && (params['promoter_not_contains'] != '')
+      str = '%' + params['promoter_not_contains'] + '%'
+      conds << ["parts.sequence NOT like ? AND part_types.name = ?", str, 'promoter']
+    end
+
+    if params['utr_contains'] && (params['utr_contains'] != '')
+      str = '%' + params['utr_contains'] + '%'
+      conds << ["parts.sequence like ? AND part_types.name = ?", str, 'five_prime_utr']
+    end
+
+    if params['utr_not_contains'] && (params['utr_not_contains'] != '')
+      str = '%' + params['utr_not_contains'] + '%'
+      conds << ["parts.sequence NOT like ? AND part_types.name = ?", str, 'five_prime_utr']
+    end
+
+    conds << ["normalized <= ? AND normalized >= ?", max, min]
+    
+    # -- turn conitions into nice array
+
+    sqls = []
+    args = []
+    conds.each do |cond|
+      sqls << '('+cond[0]+')'
+      args += cond[1..-1]
+    end
+
+    conditions = [sqls.join(' AND ')] + args
+
+    # -- do the query
+
     @exps = ExpressionLevel.find(:all,
-                                 :conditions => ["normalized <= ? AND normalized >= ?", max, min],
-                                :order => "ABS(normalized - #{@target}/100) asc",
-                                :limit => @limit)
+                                 :conditions => conditions,
+                                 :joins => [{:promoter => :part_type}, {:utr => :part_type}],
+                                 :order => "ABS(normalized - #{@target}/100) asc",
+                                 :limit => @limit)
 
     render :partial => 'results'
   end
